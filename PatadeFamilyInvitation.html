@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>पाताडे गणपती आमंत्रण</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Devanagari:wght@400;600;700&family=Noto+Sans+Devanagari:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#150a0b;
+    --bg2:#241213;
+    --gold:#d7ae52;
+    --gold-light:#efd89a;
+    --cream:#f3e7d3;
+    --line:rgba(215,174,82,0.35);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--cream);font-family:'Noto Sans Devanagari','Noto Serif Devanagari',serif;overflow-x:hidden;}
+  body.locked{overflow:hidden;height:100vh;}
+  a{color:inherit;}
+
+  .bg-texture{
+    position:fixed;inset:0;z-index:-1;
+    background:
+      radial-gradient(circle at 20% 10%, rgba(215,174,82,0.06), transparent 40%),
+      radial-gradient(circle at 80% 30%, rgba(215,174,82,0.05), transparent 45%),
+      radial-gradient(circle at 50% 90%, rgba(215,174,82,0.05), transparent 40%),
+      linear-gradient(160deg, var(--bg), var(--bg2) 60%, var(--bg));
+  }
+
+  .gate{position:fixed;inset:0;z-index:999;display:flex;}
+  .gate-panel{width:50%;height:100%;background:
+      repeating-linear-gradient(90deg, transparent 0 38px, var(--line) 38px 39px),
+      linear-gradient(180deg,#0e0708,#1c0e0f);
+      transition:transform 1s cubic-bezier(.77,0,.18,1);}
+  .gate.open .gate-panel.left{transform:translateX(-100%);}
+  .gate.open .gate-panel.right{transform:translateX(100%);}
+  .gate-btn{
+    position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
+    width:170px;height:170px;border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, #f5e3ab, var(--gold) 60%, #a9822f 100%);
+    box-shadow:0 0 40px rgba(215,174,82,0.55), inset 0 0 20px rgba(255,255,255,0.25);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    cursor:pointer;border:none;z-index:1000;color:#2a1608;
+    font-family:'Noto Serif Devanagari',serif;
+    transition:opacity .6s ease;
+  }
+  .gate-btn span.big{font-size:16px;letter-spacing:1px;margin-bottom:6px;}
+  .gate-btn span.small{font-size:10px;letter-spacing:3px;font-family:'Cormorant Garamond',serif;text-transform:uppercase;}
+  .gate.open .gate-btn{opacity:0;pointer-events:none;}
+
+  .navbar{
+    position:sticky;top:0;z-index:50;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:18px 6vw;background:linear-gradient(180deg, rgba(21,10,11,0.92), rgba(21,10,11,0.4));
+    backdrop-filter:blur(4px);
+  }
+  .brand{display:flex;align-items:center;gap:10px;}
+  .brand .om{font-size:26px;color:var(--gold);}
+  .brand .tag{font-size:14px;color:var(--gold-light);letter-spacing:.5px;}
+  .music-btn{
+    width:42px;height:42px;border-radius:50%;border:1px solid var(--line);
+    background:rgba(255,255,255,0.03);color:var(--gold);
+    display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;
+  }
+
+  section{position:relative;padding:80px 6vw;text-align:center;}
+  .label{font-family:'Cormorant Garamond',serif;letter-spacing:4px;text-transform:uppercase;color:#b9a888;font-size:13px;margin-bottom:10px;}
+  .heading{font-family:'Noto Serif Devanagari',serif;color:var(--gold);font-weight:700;font-size:clamp(28px,5vw,46px);line-height:1.25;margin:0 0 18px;}
+  .divider{width:120px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:22px auto;position:relative;}
+  .divider::after{content:"❁";position:absolute;left:50%;top:-9px;transform:translateX(-50%);color:var(--gold);font-size:14px;background:var(--bg);padding:0 6px;}
+  p.desc{max-width:640px;margin:0 auto;color:#e8d9bd;line-height:1.9;font-size:16px;}
+
+  .reveal{opacity:0;transform:translateY(24px);transition:opacity .9s ease, transform .9s ease;}
+  .reveal.visible{opacity:1;transform:none;}
+
+  .hero{padding-top:60px;}
+  .hero .pretitle{font-size:14px;color:#cbb98a;margin-bottom:6px;font-family:'Noto Serif Devanagari',serif;}
+  .hero h1{font-family:'Noto Serif Devanagari',serif;color:var(--gold);font-weight:700;font-size:clamp(40px,9vw,72px);line-height:1.15;margin:0 0 30px;}
+
+  .arch-wrap{display:flex;justify-content:center;margin-top:10px;}
+  .arch{
+    width:min(78vw,340px);height:min(95vw,420px);
+    border:3px solid var(--gold);
+    border-radius:170px 170px 14px 14px;
+    position:relative;overflow:hidden;
+    box-shadow:0 0 35px rgba(215,174,82,0.25);
+    background:linear-gradient(180deg,#2a1517,#160a0b);
+  }
+  .arch img{width:100%;height:100%;object-fit:cover;display:none;}
+  .arch.has-img img{display:block;}
+  .arch.has-img .upload-hint{display:none;}
+  .upload-hint{
+    position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:#c9b98d;
+  }
+  .upload-hint .plus{font-size:34px;color:var(--gold);}
+  .upload-hint span{font-size:14px;letter-spacing:.5px;}
+
+  .photo-frame{
+    width:100%;aspect-ratio:3/3.4;border:2px solid var(--gold);border-radius:14px;
+    position:relative;overflow:hidden;cursor:pointer;background:linear-gradient(180deg,#2a1517,#160a0b);
+    box-shadow:0 6px 18px rgba(0,0,0,0.4);
+  }
+  .photo-frame img{width:100%;height:100%;object-fit:cover;display:none;}
+  .photo-frame.has-img img{display:block;}
+  .photo-frame.has-img .upload-hint{display:none;}
+  .photo-frame .upload-hint .plus{font-size:26px;}
+  .photo-frame .upload-hint span{font-size:11px;}
+
+  .greet-name{font-family:'Noto Serif Devanagari',serif;color:var(--gold);font-size:clamp(24px,4vw,34px);margin:0;}
+  .greet-sub{color:#e6d7ba;margin-top:8px;font-size:15px;}
+
+  .family-grid{display:flex;flex-wrap:wrap;gap:26px;justify-content:center;max-width:1100px;margin:40px auto 0;}
+  .family-card{width:200px;}
+  .family-card .name{margin-top:14px;font-family:'Noto Serif Devanagari',serif;font-size:19px;color:#f3e9d3;font-weight:600;}
+  .family-card .name[contenteditable]{outline:none;border-bottom:1px dashed transparent;}
+  .family-card .name[contenteditable]:focus{border-bottom:1px dashed var(--gold);}
+
+  .festival-cards{display:flex;justify-content:center;gap:24px;flex-wrap:wrap;margin:0 auto 34px;}
+  .fcard{
+    background:rgba(255,255,255,0.03);border:1px solid var(--line);border-radius:16px;
+    padding:26px 40px;min-width:220px;
+  }
+  .fcard .flabel{color:var(--gold);font-size:14px;letter-spacing:1px;margin-bottom:10px;}
+  .fcard .fvalue{font-size:22px;color:#f5ecd8;font-weight:600;}
+  .festival-desc{
+    background:rgba(255,255,255,0.02);border:1px solid var(--line);border-radius:16px;
+    padding:32px 6vw;max-width:900px;margin:0 auto;color:#e8d9bd;line-height:2;font-size:16px;
+  }
+
+  .loc-card{
+    display:flex;flex-wrap:wrap;max-width:1000px;margin:0 auto;border-radius:18px;overflow:hidden;
+    border:1px solid var(--line);background:rgba(255,255,255,0.02);text-align:left;
+  }
+  .loc-map{flex:1 1 380px;min-height:320px;position:relative;}
+  .loc-map iframe{width:100%;height:100%;min-height:320px;border:0;filter:grayscale(35%) contrast(1.05);display:block;}
+  .open-in-maps-tag{
+    position:absolute;top:14px;left:14px;background:rgba(20,10,10,0.85);color:var(--gold-light);
+    padding:6px 12px;border-radius:8px;font-size:13px;text-decoration:none;border:1px solid var(--line);
+  }
+  .loc-info{flex:1 1 320px;padding:40px 6vw 40px 34px;display:flex;flex-direction:column;justify-content:center;}
+  .loc-info .hint{font-size:13px;color:#c9b676;margin-bottom:18px;text-align:right;}
+  .loc-info h3{font-family:'Noto Serif Devanagari',serif;color:var(--gold-light);font-size:28px;margin:0 0 16px;}
+  .loc-info .addr{
+    color:#e7d9bc;line-height:1.8;font-size:15px;margin-bottom:26px;min-height:24px;
+    outline:none;border-bottom:1px dashed transparent;
+  }
+  .loc-info .addr:focus{border-bottom:1px dashed var(--gold);}
+  .loc-info .addr:empty:before{content:"इथे तुमचा संपूर्ण पत्ता लिहा (क्लिक करून संपादित करा)";opacity:.55;}
+  .btn-gold{
+    display:inline-block;background:linear-gradient(180deg,#efd89a,#c99f3f);color:#2a1608;
+    padding:14px 30px;border-radius:30px;font-weight:600;text-decoration:none;font-size:15px;
+    align-self:flex-start;box-shadow:0 6px 16px rgba(0,0,0,0.35);
+  }
+
+  .footer{padding:70px 6vw 40px;}
+  .footer .line1{font-family:'Noto Serif Devanagari',serif;color:var(--cream);font-size:clamp(20px,3.4vw,30px);line-height:1.5;}
+  .footer .sig{margin-top:18px;color:var(--gold);font-size:15px;}
+
+  .corner{position:absolute;width:80px;height:80px;opacity:.7;pointer-events:none;}
+  .corner.tl{top:16px;left:16px;}
+  .corner.tr{top:16px;right:16px;transform:scaleX(-1);}
+  .corner.bl{bottom:16px;left:16px;transform:scaleY(-1);}
+  .corner.br{bottom:16px;right:16px;transform:rotate(180deg);}
+
+  input[type=file]{display:none;}
+
+  @media(max-width:640px){
+    .loc-info{padding:28px 6vw;}
+    .loc-info .hint{text-align:left;}
+  }
+</style>
+</head>
+<body class="locked">
+
+<div class="bg-texture"></div>
+
+<div class="gate" id="gate">
+  <div class="gate-panel left"></div>
+  <div class="gate-panel right"></div>
+</div>
+<button class="gate-btn" id="gateBtn">
+  <span class="big">॥ गणेशाय नमः ॥</span>
+  <span class="small">Tap to Open</span>
+</button>
+
+<div class="navbar">
+  <div class="brand">
+    <span class="om">ॐ</span>
+    <span class="tag">॥ श्री गणेशाय नमः ॥</span>
+  </div>
+</div>
+<!-- <audio id="bgAudio" loop src="your-audio-file.mp3"></audio> -->
+
+<section class="hero reveal">
+  <svg class="corner tl" viewBox="0 0 100 100"><path d="M5 95 L5 40 Q5 10 40 10 L95 10" stroke="#d7ae52" stroke-width="2" fill="none"/><circle cx="5" cy="95" r="3" fill="#d7ae52"/></svg>
+  <div class="pretitle">आमच्या घरी यावर्षी</div>
+  <h1>बाप्पाचे<br>आगमन</h1>
+  <div class="arch-wrap">
+    <div class="arch" id="ganpatiFrame">
+      <div class="upload-hint">
+        <span class="plus">🕉</span>
+      </div>
+      <img id="ganpatiImg" src="images/ganpati.png" alt="Ganpati Bappa"
+           onload="this.parentElement.classList.add('has-img')"
+           onerror="this.style.display='none'">
+    </div>
+  </div>
+</section>
+
+<section class="reveal">
+  <div class="greet-name">पाताडे परिवाराकडून</div>
+  <div class="divider"></div>
+
+  <div class="label">Invitation</div>
+  <h2 class="heading">सस्नेह आमंत्रण</h2>
+  <div class="divider"></div>
+  <p class="desc">गणेश चतुर्थीच्या या मंगल क्षणी आपण सर्वांनी उपस्थित राहून उत्सवाची शोभा वाढवावी.</p>
+</section>
+
+<section class="reveal">
+  <div class="label">Family</div>
+  <h2 class="heading">आग्रहाचे आमंत्रण by</h2>
+  <div class="divider"></div>
+
+  <div class="family-grid">
+    <div class="family-card">
+      <div class="photo-frame">
+        <div class="upload-hint"><span class="plus"></span><span>balkrishna.png</span></div>
+        <img src="images/balkrishna.png" alt="राजेश पाताडे"
+             onload="this.parentElement.classList.add('has-img')"
+             onerror="this.style.display='none'">
+      </div>
+      <div class="name" contenteditable="true">बाळकृष्ण पाताडे</div>
+    </div>
+    <div class="family-card">
+      <div class="photo-frame">
+        <div class="upload-hint"><span class="plus">+</span><span>bhagyashree.png</span></div>
+        <img src="images/bhagyashree.png" alt="मीरा पाताडे"
+             onload="this.parentElement.classList.add('has-img')"
+             onerror="this.style.display='none'">
+      </div>
+      <div class="name" contenteditable="true">भाग्यश्री पाताडे</div>
+    </div>
+  </div>
+</section>
+
+<section class="reveal" style="position:relative;">
+  <svg class="corner tl" viewBox="0 0 100 100"><path d="M5 95 L5 40 Q5 10 40 10 L95 10" stroke="#d7ae52" stroke-width="2" fill="none"/><circle cx="5" cy="95" r="3" fill="#d7ae52"/></svg>
+  <div class="label">Festival</div>
+  <h2 class="heading">गणेश उत्सव</h2>
+  <div class="divider"></div>
+
+  <div class="festival-cards">
+    <div class="fcard">
+      <div class="flabel">स्थापना</div>
+      <div class="fvalue">१४ सप्टेंबर २०२६</div>
+    </div>
+  </div>
+
+  <div class="festival-desc">
+    यावर्षी ही दर वर्षी प्रमाणे आमच्या घरी १४ सप्टेंबर २०२६ रोजी गणरायाची स्थापना होणार असून बाप्पाचा मुक्काम ५ दिवसांचा असणार आहे.<br><br>
+    या मंगल प्रसंगी आपण सर्वांनी सहकुटुंब उपस्थित राहून बाप्पाचे आशीर्वाद घ्यावेत, ही नम्र विनंती.
+  </div>
+</section>
+
+<section class="reveal">
+  <div class="label">Location</div>
+  <h2 class="heading">ठिकाण</h2>
+  <div class="divider"></div>
+
+  <div class="loc-card">
+    <div class="loc-map">
+      <a class="open-in-maps-tag" href="https://maps.app.goo.gl/pM8ZHgUrB5wG1nWt5?g_st=ac" target="_blank" rel="noopener">Open in Maps ↗</a>
+      <iframe src="https://www.google.com/maps?q=16.0408474,73.5696097&z=15&output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+    <div class="loc-info">
+      <div class="hint">बाप्पाच्या दर्शनासाठी अवश्य या</div>
+      <h3>पाताडे निवास</h3>
+      <a class="btn-gold" href="https://maps.app.goo.gl/pM8ZHgUrB5wG1nWt5?g_st=ac" target="_blank" rel="noopener">Open Maps</a>
+    </div>
+  </div>
+</section>
+
+<section class="footer reveal">
+  <div class="divider"></div>
+  <div class="line1">आपली उपस्थिती हेच आमच्यासाठी<br>बाप्पाचे आशीर्वाद आहेत.</div>
+  <div class="sig">— पाताडे परिवार</div>
+</section>
+
+<script>
+  const gate = document.getElementById('gate');
+  const gateBtn = document.getElementById('gateBtn');
+  gateBtn.addEventListener('click', () => {
+    gate.classList.add('open');
+    gateBtn.style.opacity = '0';
+    gateBtn.style.pointerEvents = 'none';
+    document.body.classList.remove('locked');
+    setTimeout(() => { gate.style.display = 'none'; }, 1000);
+  });
+
+  const musicBtn = document.getElementById('musicBtn');
+  let playing = false;
+  musicBtn.addEventListener('click', () => {
+    const audio = document.getElementById('bgAudio');
+    playing = !playing;
+    musicBtn.textContent = playing ? '🔊' : '🎵';
+    if (audio) { playing ? audio.play().catch(()=>{}) : audio.pause(); }
+  });
+
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+  }, {threshold:0.15});
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+
+</body>
+</html>
