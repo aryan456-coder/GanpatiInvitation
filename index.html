@@ -300,14 +300,7 @@
     setTimeout(() => { gate.style.display = 'none'; }, 1000);
   });
 
-  const musicBtn = document.getElementById('musicBtn');
-  let playing = false;
-  musicBtn.addEventListener('click', () => {
-    const audio = document.getElementById('bgAudio');
-    playing = !playing;
-    musicBtn.textContent = playing ? '🔊' : '🎵';
-    if (audio) { playing ? audio.play().catch(()=>{}) : audio.pause(); }
-  });
+ 
 
   const obs = new IntersectionObserver(entries => {
     entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
